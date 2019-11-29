@@ -420,6 +420,23 @@ services:
       - data
       - command
 
+  clojure:
+    image: edgexfoundry/docker-edgex-ui-clojure:1.1.0
+    ports:
+      - "8080:8080"
+    container_name: edgex-ui-clojure
+    hostname: edgex-ui-clojure
+    networks:
+      - edgex-network
+    volumes:
+      - db-data:/data/db
+      - log-data:/edgex/logs
+      - consul-config:/consul/config
+      - consul-data:/consul/data
+    depends_on:
+      - data
+      - command
+
 #################################################################
 # Tooling
 #################################################################
