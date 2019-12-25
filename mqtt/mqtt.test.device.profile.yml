@@ -1,0 +1,102 @@
+# mqtt.test.device.profile.yml
+name: "Test.Device.MQTT.Profile"
+manufacturer: "iot"
+model: "MQTT-DEVICE"
+description: "Test device profile"
+labels:
+  - "mqtt"
+  - "test"
+deviceResources:
+  -
+    name: randnum
+    description: "device random number"
+    properties:
+      value:
+        { type: "Float64", size: "4", readWrite: "R", floatEncoding: "eNotation"  }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "" }
+  -
+    name: ping
+    description: "device awake"
+    properties:
+      value:
+        { type: "String", size: "0", readWrite: "R", defaultValue: "pong" }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "" }
+  -
+    name: message
+    description: "device message"
+    properties:
+      value:
+        { type: "String", size: "0", readWrite: "W" ,scale: "", offset: "", base: ""  }
+      units:
+        { type: "String", readWrite: "R", defaultValue: "" }
+
+deviceCommands:
+  -
+    name: testrandnum
+    get:
+    - { index: "1", operation: "get", object: "randnum", parameter: "randnum" }
+  -
+    name: testping
+    get:
+    - { index: "1", operation: "get", object: "ping", parameter: "ping" }
+  -
+    name: testmessage
+    get:
+    - { index: "1", operation: "get", object: "message", parameter: "message" }
+    set:
+    - { index: "1", operation: "set", object: "message", parameter: "message" }
+
+coreCommands:
+  -
+    name: testrandnum
+    get:
+      path: "/api/v1/device/{deviceId}/testrandnum"
+      responses:
+      -
+        code: "200"
+        description: "get the random value"
+        expectedValues: ["randnum"]
+      -
+        code: "503"
+        description: "service unavailable"
+        expectedValues: []
+  -
+    name: testping
+    get:
+      path: "/api/v1/device/{deviceId}/testping"
+      responses:
+      -
+        code: "200"
+        description: "ping the device"
+        expectedValues: ["ping"]
+      -
+        code: "503"
+        description: "service unavailable"
+        expectedValues: []
+  -
+    name: testmessage
+    get:
+      path: "/api/v1/device/{deviceId}/testmessage"
+      responses:
+      -
+        code: "200"
+        description: "get the message"
+        expectedValues: ["message"]
+      -
+        code: "503"
+        description: "service unavailable"
+        expectedValues: []
+    put:
+      path: "/api/v1/device/{deviceId}/testmessage"
+      parameterNames: ["message"]
+      responses:
+      -
+        code: "204"
+        description: "set the message."
+        expectedValues: []
+      -
+        code: "503"
+        description: "service unavailable"
+        expectedValues: []

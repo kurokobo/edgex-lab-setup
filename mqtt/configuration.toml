@@ -1,0 +1,97 @@
+# configuration.toml
+[Writable]
+LogLevel = 'DEBUG'
+
+[Service]
+Host = "edgex-device-mqtt"
+Port = 49982
+ConnectRetries = 3
+Labels = []
+OpenMsg = "device mqtt started"
+Timeout = 5000
+EnableAsyncReadings = true
+AsyncBufferSize = 16
+
+[Registry]
+Host = "edgex-core-consul"
+Port = 8500
+CheckInterval = "10s"
+FailLimit = 3
+FailWaitTime = 10
+Type = "consul"
+
+[Logging]
+EnableRemote = false
+File = "./device-mqtt.log"
+
+[Clients]
+  [Clients.Data]
+  Name = "edgex-core-data"
+  Protocol = "http"
+  Host = "edgex-core-data"
+  Port = 48080
+  Timeout = 50000
+
+  [Clients.Metadata]
+  Name = "edgex-core-metadata"
+  Protocol = "http"
+  Host = "edgex-core-metadata"
+  Port = 48081
+  Timeout = 50000
+
+  [Clients.Logging]
+  Name = "edgex-support-logging"
+  Protocol = "http"
+  Host ="edgex-support-logging"
+  Port = 48061
+
+[Device]
+  DataTransform = true
+  InitCmd = ""
+  InitCmdArgs = ""
+  MaxCmdOps = 128
+  MaxCmdValueLen = 256
+  RemoveCmd = ""
+  RemoveCmdArgs = ""
+  ProfilesDir = "/custom-config"
+
+# Pre-define Devices
+[[DeviceList]]
+  Name = "MQ_DEVICE"
+  Profile = "Test.Device.MQTT.Profile"
+  Description = "General MQTT device"
+  Labels = [ "MQTT"]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       Schema = "tcp"
+       Host = "172.20.10.13"
+       Port = "1883"
+       ClientId = "CommandPublisher"
+       User = ""
+       Password = ""
+       Topic = "CommandTopic"
+  [[DeviceList.AutoEvents]]
+    Frequency = "30s"
+    OnChange = false
+    Resource = "testrandnum"
+
+# Driver configs
+[Driver]
+IncomingSchema = "tcp"
+IncomingHost = "172.20.10.13"
+IncomingPort = "1883"
+IncomingUser = ""
+IncomingPassword = ""
+IncomingQos = "0"
+IncomingKeepAlive = "3600"
+IncomingClientId = "IncomingDataSubscriber"
+IncomingTopic = "DataTopic"
+ResponseSchema = "tcp"
+ResponseHost = "172.20.10.13"
+ResponsePort = "1883"
+ResponseUser = ""
+ResponsePassword = ""
+ResponseQos = "0"
+ResponseKeepAlive = "3600"
+ResponseClientId = "CommandResponseSubscriber"
+ResponseTopic = "ResponseTopic"
