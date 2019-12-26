@@ -349,23 +349,7 @@ services:
   #     - data
   #     - command
   #
-  # device-mqtt:
-  #   image: edgexfoundry/docker-device-mqtt-go:1.1.0
-  #   ports:
-  #     - "49982:49982"
-  #   container_name: edgex-device-mqtt
-  #   hostname: edgex-device-mqtt
-  #   networks:
-  #     - edgex-network
-  #   volumes:
-  #     - db-data:/data/db
-  #     - log-data:/edgex/logs
-  #     - consul-config:/consul/config
-  #     - consul-data:/consul/data
-  #   depends_on:
-  #     - data
-  #     - command
-  #
+
   device-mqtt:
     image: edgexfoundry/docker-device-mqtt-go:1.0.0
     ports:
@@ -387,6 +371,7 @@ services:
       - /device-mqtt
       - --registry=consul://edgex-core-consul:8500
       - --confdir=/custom-config
+  
   # device-modbus:
   #   image: edgexfoundry/docker-device-modbus-go:1.1.0
   #   ports:
